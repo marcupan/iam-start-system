@@ -22,10 +22,10 @@ export class JwtGuard implements CanActivate {
       throw new UnauthorizedException('Authorization token not found');
 
     try {
-      const payload = this.jwtService.verify(token);
-      request.user = payload;
+      request.user = this.jwtService.verify(token);
+
       return true;
-    } catch (err) {
+    } catch {
       throw new UnauthorizedException('Invalid token');
     }
   }
