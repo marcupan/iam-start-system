@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
+
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,9 +25,9 @@ async function bootstrap() {
   // Use global validation pipes to handle DTO validation
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // Automatically remove unwanted properties from the DTO
-      forbidNonWhitelisted: true, // Throw an error if there are extra properties
-      transform: true, // Automatically transform request payloads to DTO instances
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 
@@ -35,7 +36,7 @@ async function bootstrap() {
 
   // Start the server
   await app.listen(port);
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
+  console.log(`🚀 Application is running on port: ${port}`);
 }
 
 bootstrap();
