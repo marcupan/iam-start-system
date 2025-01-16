@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DB'),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: true, // in dev
       }),
     }),
   ],
