@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
@@ -13,9 +13,9 @@ import { UsersModule } from '../user/users.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
-    UsersModule,
+    forwardRef(() => UsersModule), // Use forwardRef for circular dependency
   ],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule], // Export JwtModule and AuthService
 })
 export class AuthModule {}

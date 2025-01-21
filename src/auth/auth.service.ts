@@ -1,6 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 import { UsersService } from '../user/users.service';
 
@@ -8,40 +8,25 @@ import { UsersService } from '../user/users.service';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
+    @Inject(forwardRef(() => UsersService)) // Use forwardRef here
     private readonly usersService: UsersService,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
-    // Find the user in the database
     const user = await this.usersService.findOneByUsername(username);
+    if (user && (await this.verifyPassword(pass, user.password))) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      return result;
     }
-
-    // Compare the provided password with the hashed password in the database
-    const isPasswordValid = await bcrypt.compare(pass, user.password);
-
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    // Return the user object without exposing the password
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = user;
-
-    return result;
+    return null;
   }
 
-  async login(user: any) {
-    const payload = {
-      username: user.username,
-      sub: user.userId,
-      roles: user.roles,
-    };
-
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  private async verifyPassword(
+    plainTextPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(plainTextPassword, hashedPassword);
   }
 }

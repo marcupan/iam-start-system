@@ -20,4 +20,4 @@ RUN pnpm build
 EXPOSE 3000
 
 # Start the app
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start:dev"]
