@@ -4,7 +4,7 @@ services:
     container_name: dev_postgres
     restart: always
     env_file:
-      .env.development
+      - .env.development
     ports:
       - "5432:5432"
     volumes:
@@ -16,5 +16,20 @@ services:
       timeout: 5s
       retries: 5
 
+  mongo:
+    image: mongo:6
+    container_name: dev_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   postgres_data:
+  mongo_data:
