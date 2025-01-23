@@ -8,6 +8,7 @@ import { UsersService } from '../user/users.service';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
+
     @Inject(forwardRef(() => UsersService)) // Use forwardRef here
     private readonly usersService: UsersService,
   ) {}
@@ -20,6 +21,7 @@ export class AuthService {
 
       return result;
     }
+
     return null;
   }
 

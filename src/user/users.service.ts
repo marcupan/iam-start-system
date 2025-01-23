@@ -24,11 +24,13 @@ export class UsersService {
     const { username, password, roles } = createUserDto;
 
     const existingUser = await this.findOneByUsername(username);
+
     if (existingUser) {
       throw new BadRequestException('Username already taken');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = this.userRepository.create({
       username,
       password: hashedPassword,

@@ -14,6 +14,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         connection.on('disconnected', () => {
           Logger.warn('MongoDB disconnected.', 'MongoDbModule');
         });
+
         return connection;
       },
     }),
