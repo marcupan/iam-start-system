@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-
 import { AppModule } from './../src/app.module';
 
 describe('IAM System (e2e)', () => {
   let app: INestApplication;
+  let accessToken: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -19,8 +19,6 @@ describe('IAM System (e2e)', () => {
   afterAll(async () => {
     await app.close();
   });
-
-  let accessToken: string;
 
   it('POST /users - Register a new user', async () => {
     const response = await request(app.getHttpServer())
@@ -61,11 +59,10 @@ describe('IAM System (e2e)', () => {
     expect(response.body).toBeInstanceOf(Array);
   });
 
-  it('GET /users - Restrict access based on roles (Admin only)', async () => {
-    // Trying to access an admin route with a user token should be forbidden
+  it('GET /admin-only - Restrict access based on roles (Admin only)', async () => {
     await request(app.getHttpServer())
-      .get('/users')
+      .get('/admin-only')
       .set('Authorization', `Bearer ${accessToken}`)
-      .expect(403); // Forbidden
+      .expect(403);
   });
 });
