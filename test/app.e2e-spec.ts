@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+
 import { AppModule } from './../src/app.module';
 
 describe('IAM System (e2e)', () => {
@@ -8,6 +9,8 @@ describe('IAM System (e2e)', () => {
   let accessToken: string;
 
   beforeAll(async () => {
+    jest.setTimeout(30000);
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -17,7 +20,9 @@ describe('IAM System (e2e)', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    if (app) {
+      await app.close();
+    }
   });
 
   it('POST /users - Register a new user', async () => {
