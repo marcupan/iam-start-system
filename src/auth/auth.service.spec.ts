@@ -1,3 +1,5 @@
+jest.unmock('bcrypt');
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from '../user/users.service';
@@ -32,12 +34,10 @@ describe('AuthService', () => {
   });
 
   beforeEach(() => {
-    // ✅ Ensure `bcrypt.compare` is always mocked before each test
     jest.spyOn(bcrypt, 'compare').mockImplementation(async (plain, hashed) => {
       return plain === 'securePassword123' && hashed === 'hashedPassword123';
     });
 
-    // ✅ Ensure `bcrypt.hash` is mocked
     (jest.spyOn(bcrypt, 'hash') as jest.Mock).mockResolvedValue(
       'hashedPassword123',
     );
