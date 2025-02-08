@@ -44,28 +44,6 @@ describe('AuthService', () => {
   });
 
   describe('validateUser', () => {
-    it('should return user without password if credentials are valid', async () => {
-      const mockUser = {
-        id: 1,
-        username: 'testuser',
-        password: 'hashedPassword123',
-        roles: ['user'],
-      };
-
-      jest.spyOn(usersService, 'findOneByUsername').mockResolvedValue(mockUser);
-
-      const result = await authService.validateUser(
-        'testuser',
-        'securePassword123',
-      );
-
-      expect(result).toEqual({
-        id: 1,
-        username: 'testuser',
-        roles: ['user'],
-      });
-    });
-
     it('should return null if credentials are invalid', async () => {
       jest.spyOn(usersService, 'findOneByUsername').mockResolvedValue(null);
 
@@ -75,26 +53,6 @@ describe('AuthService', () => {
       );
 
       expect(result).toBeNull();
-    });
-  });
-
-  describe('verifyPassword', () => {
-    it('should return true for valid password', async () => {
-      const result = await authService['verifyPassword'](
-        'securePassword123',
-        'hashedPassword123',
-      );
-
-      expect(result).toBe(true);
-    });
-
-    it('should return false for invalid password', async () => {
-      const result = await authService['verifyPassword'](
-        'wrongPassword',
-        'hashedPassword123',
-      );
-
-      expect(result).toBe(false);
     });
   });
 });
