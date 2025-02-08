@@ -7,12 +7,9 @@ import { User } from './entities/user.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    forwardRef(() => AuthModule), // Use forwardRef for circular dependency
-  ],
+  imports: [TypeOrmModule.forFeature([User]), forwardRef(() => AuthModule)],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [UsersService], // Export UsersService for use in AuthModule
+  exports: [UsersService],
 })
 export class UsersModule {}

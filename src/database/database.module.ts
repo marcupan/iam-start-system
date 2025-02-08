@@ -16,8 +16,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DB'),
         autoLoadEntities: true,
-        migrationsRun: true, // Automatically run migrations
-        synchronize: false, // Disable auto-sync in production
+        migrationsRun: true,
+        synchronize: false,
         logging: configService.get<string>('NODE_ENV') === 'development',
       }),
     }),
